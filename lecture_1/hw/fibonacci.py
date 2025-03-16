@@ -1,7 +1,17 @@
-import math, json
+import json
 
 
-async def factorial_handler(scope, recive, send) -> None:
+def fibonacci_func(n):
+    if n <= 1:
+        return n
+    else:
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, a + b
+        return b
+
+
+async def fibonacci_handler(scope, recive, send):
     if scope["type"] != "http":
         await send(
             {
@@ -36,10 +46,10 @@ async def factorial_handler(scope, recive, send) -> None:
         )
         return
 
-    query_string = scope["query_string"].decode()
-    parse = dict(q.split("=") for q in query_string.split("&"))
+    path = scope["path"]
+    path_parts = path.split("/")
 
-    n_str = parse.get("n")
+    n_str = path_parts[-1]
 
     if n_str is None:
         await send(
@@ -93,7 +103,7 @@ async def factorial_handler(scope, recive, send) -> None:
         )
         return
 
-    result = math.factorial(n_int)
+    result = fibonacci_func(n_int)
     await send(
         {
             "type": "http.response.start",
