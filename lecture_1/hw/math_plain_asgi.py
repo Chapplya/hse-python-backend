@@ -1,8 +1,17 @@
-from typing import Any, Awaitable, Callable
+from lecture_1.hw.Factorial import factorial_handler, json
 
+async def app(scope, receive, send):
+    path = scope['path']
 
-async def app(
-    scope: dict[str, Any],
-    receive: Callable[[], Awaitable[dict[str, Any]]],
-    send: Callable[[dict[str, Any]], Awaitable[None]],
-) -> None: ...
+    if path == '/factorial':
+        await factorial_handler(scope, receive, send)
+    else:
+        await send({
+            'type': 'http.response.start',
+            'status': 404,
+            'headers': [(b'content-type', b'application/json')]
+        })
+        await send({
+            'type': 'http.response.body',
+            'body': json.dumps({'error': 'Not Found'}).encode()
+        })
