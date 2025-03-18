@@ -4,13 +4,9 @@ from lecture_1.hw.base import Base, send_response
 
 class factorial(Base):
     async def handle(self):
-        if self.scope["type"] != "http":
-            await send_response(self.send, 404, {"error": "Not Found"})
-            return
-
-        if self.scope["method"] != "GET":
-            await send_response(self.send, 404, {"error": "Not Found"})
-            return
+        if self.scope["type"] != "http" or self.scope["method"] != "GET":
+           await send_response(self.send, 404, {"error": "Not Found"})
+           return
 
         parse = await self.parse_str("query_string")
 

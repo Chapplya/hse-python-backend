@@ -3,12 +3,9 @@ from lecture_1.hw.base import Base, send_response
 
 class FibonacciHandler(Base):
     async def handle(self):
-        if self.scope["type"] != "http":
-            await send_response(self.send, 404, {"error": "Not Found"})
-            return
-
-        if self.scope["method"] != "GET":
-            await send_response(self.send, 404, {"error": "Not Found"})
+        if self.scope["type"] != "http" or self.scope["method"] != "GET":
+           await send_response(self.send, 404, {"error": "Not Found"})
+           return
 
         path_parts = self.handle()
         n_str = path_parts[-1]
