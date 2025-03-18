@@ -1,39 +1,14 @@
 import json
+from lecture_1.hw.send_resp_http import send_response
 
 
 async def mean_handler(scope, recive, send):
     if scope["type"] != "http":
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 404,
-                "header": [(b"content-type", b"application/json")],
-            }
-        )
-
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "Not Found"}).encode(),
-            }
-        )
+        await send_response(send, 404, {"error": "Not Found"})
         return
 
     if scope["method"] != "GET":
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 404,
-                "header": [(b"content-type", b"application/json")],
-            }
-        )
-
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "Not Found"}).encode(),
-            }
-        )
+        await send_response(send, 404, {"error": "Not Found"})
         return
 
     get_body = await recive()  # вытягиает тело запроса клиента как слвоарь
@@ -43,81 +18,23 @@ async def mean_handler(scope, recive, send):
     )  # json.loads()  преобразует полученный объект в словарь
 
     if not (get_mas):
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 422,
-                "header": [(b"content-type", b"application/json")],
-            }
-        )
-
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "Missed"}).encode(),
-            }
-        )
+        await send_response(send, 422, {"error": "Missed"})
         return
 
     if not (isinstance(get_mas, list)):
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 422,
-                "header": [(b"content-type", b"application/json")],
-            }
-        )
-
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "Number musm be integer"}).encode(),
-            }
-        )
+        await send_response(send, 422, {"error": "Number nums be integer"})
         return
 
     if len(get_mas) == 0:
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 400,
-                "headers": [(b"content-type", b"application/json")],
-            }
-        )
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "Array cannot be empty"}).encode(),
-            }
-        )
+        await send_response(send, 400, {"error": "Array cannot be empty"})
         return
 
     for elem in get_mas:
         if not (isinstance(elem, float)):
-            await send(
-                {
-                    "type": "http.response.start",
-                    "status": 422,
-                    "headers": [(b"content-type", b"application/json")],
-                }
-            )
-            await send(
-                {
-                    "type": "http.response.body",
-                    "body": json.dumps({"error": "There is no float"}).encode(),
-                }
-            )
+            await send_response(send, 422, {"error": "There is no float"})
             return
 
     result = sum(get_mas) / len(get_mas)
 
-    await send(
-        {
-            "type": "http.response.start",
-            "status": 200,
-            "headers": [(b"content-type", b"application/json")],
-        }
-    )
-    await send(
-        {"type": "http.response.body", "body": json.dumps({"result": result}).encode()}
-    )
+    await send_response(send, 200, {"result": result})
+    return

@@ -1,5 +1,4 @@
-import json
-
+from lecture_1.hw.send_resp_http import send_response
 
 def fibonacci_func(n):
     if n <= 1:
@@ -13,38 +12,12 @@ def fibonacci_func(n):
 
 async def fibonacci_handler(scope, recive, send):
     if scope["type"] != "http":
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 404,
-                "header": [(b"content-type", b"application/json")],
-            }
-        )
-
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "Not Found"}).encode(),
-            }
-        )
+        await send_response(send, 404, {"error": "Not Found"})
         return
 
     if scope["method"] != "GET":
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 404,
-                "header": [(b"content-type", b"application/json")],
-            }
-        )
-
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "Not Found"}).encode(),
-            }
-        )
-        return
+        await send_response(send, 404, {"error": "Not Found"})
+       
 
     path = scope["path"]
     path_parts = path.split("/")
@@ -52,65 +25,17 @@ async def fibonacci_handler(scope, recive, send):
     n_str = path_parts[-1]
 
     if n_str is None:
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 422,
-                "header": [(b"content-type", b"application/json")],
-            }
-        )
-
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "Missed"}).encode(),
-            }
-        )
+        await send_response(send, 422, {"error": "Missed"})
         return
 
     n_int = int(n_str)
     if not (isinstance(n_int, int)):
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 422,
-                "header": [(b"content-type", b"application/json")],
-            }
-        )
-
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "Number musm be integer"}).encode(),
-            }
-        )
+        await send_response(send, 422, {"error": "Number nums be integer"})
         return
 
     if n_int < 0:
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 400,
-                "header": [(b"content-type", b"application/json")],
-            }
-        )
-
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "the number is negative"}).encode(),
-            }
-        )
+        await send_response(send, 400, {"error": "the number is negative"})
         return
-
+    
     result = fibonacci_func(n_int)
-    await send(
-        {
-            "type": "http.response.start",
-            "status": 200,
-            "headers": [(b"content-type", b"application/json")],
-        }
-    )
-    await send(
-        {"type": "http.response.body", "body": json.dumps({"result": result}).encode()}
-    )
+    await send_response(send, 200, {"result": result})

@@ -1,6 +1,7 @@
 from lecture_1.hw.Factorial import factorial_handler, json
 from lecture_1.hw.fibonacci import fibonacci_handler
 from lecture_1.hw.mean import mean_handler
+from lecture_1.hw.send_resp_http import send_response
 
 
 async def app(scope, receive, send):
@@ -13,16 +14,4 @@ async def app(scope, receive, send):
     elif "/mean" in path:
         await mean_handler(scope, receive, send)
     else:
-        await send(
-            {
-                "type": "http.response.start",
-                "status": 404,
-                "headers": [(b"content-type", b"application/json")],
-            }
-        )
-        await send(
-            {
-                "type": "http.response.body",
-                "body": json.dumps({"error": "poshel nahuy"}).encode(),
-            }
-        )
+        await send_response(send, 404, {"error": "poshel nahuy"})
