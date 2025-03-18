@@ -1,17 +1,17 @@
-from lecture_1.hw.Factorial import factorial_handler, json
-from lecture_1.hw.fibonacci import fibonacci_handler
-from lecture_1.hw.mean import mean_handler
-from lecture_1.hw.send_resp_http import send_response
+from lecture_1.hw.Factorial import factorial
+from lecture_1.hw.fibonacci import FibonacciHandler
+from lecture_1.hw.mean import Mean
+from lecture_1.hw.base import send_response
 
 
 async def app(scope, receive, send):
     path = scope["path"]
 
     if path == "/factorial":
-        await factorial_handler(scope, receive, send)
+        await factorial(scope, receive, send).handle()
     elif "/fibonacci" in path:
-        await fibonacci_handler(scope, receive, send)
+        await FibonacciHandler(scope, receive, send).handle()
     elif "/mean" in path:
-        await mean_handler(scope, receive, send)
+        await Mean(scope, receive, send).handle()
     else:
-        await send_response(send, 404, {"error": "poshel nahuy"})
+        await send_response(send, 404, {"error": "Not Found!"})
