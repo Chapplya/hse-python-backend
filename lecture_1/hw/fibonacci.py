@@ -1,7 +1,6 @@
-from lecture_1.hw.base import Base, send_response
+from lecture_1.hw.base import Base, send_response, fibonacci_func, Strategy
 
-
-class FibonacciHandler(Base):
+class FibonacciHandler(Base,Strategy):
     async def handle(self):
         if self.scope["type"] != "http" or self.scope["method"] != "GET":
            await send_response(self.send, 404, {"error": "Not Found"})
@@ -23,5 +22,5 @@ class FibonacciHandler(Base):
             await send_response(self.send, 400, {"error": "the number is negative"})
             return
 
-        result = self.fibonacci_func(n_int)
+        result = fibonacci_func(n_int)
         await send_response(self.send, 200, {"result": result})

@@ -1,17 +1,24 @@
-from lecture_1.hw.Factorial import factorial
+from lecture_1.hw.Factorial import FactorialHandler
 from lecture_1.hw.fibonacci import FibonacciHandler
-from lecture_1.hw.mean import Mean
+from lecture_1.hw.mean import MeanHandler
 from lecture_1.hw.base import send_response
 
 
+
+handler_reg = {
+    "factorial": FactorialHandler,
+    "fibonacci": FibonacciHandler,
+    "mean" : MeanHandler
+}
+
 async def app(scope, receive, send):
     path = scope["path"]
-
-    if path == "/factorial":
-        await factorial(scope, receive, send).handle()
-    elif "/fibonacci" in path:
-        await FibonacciHandler(scope, receive, send).handle()
-    elif "/mean" in path:
-        await Mean(scope, receive, send).handle()
+    path_splitted = path.strip('/').split('/')
+    path_str = path_splitted[0]
+    if path_str in handler_reg:
+        handler_class = handler_reg[path_str]
+        handler = handler_class(scope, receive, send)
+        await handler.handle()
     else:
         await send_response(send, 404, {"error": "Not Found!"})
+

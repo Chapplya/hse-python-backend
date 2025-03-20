@@ -1,8 +1,8 @@
 import math
-from lecture_1.hw.base import Base, send_response
+from lecture_1.hw.base import Base, send_response, Strategy
 
 
-class factorial(Base):
+class FactorialHandler(Base, Strategy):
     async def handle(self):
         if self.scope["type"] != "http" or self.scope["method"] != "GET":
            await send_response(self.send, 404, {"error": "Not Found"})
