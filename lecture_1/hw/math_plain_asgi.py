@@ -15,9 +15,7 @@ async def app(scope, receive, send):
     path = scope["path"]
     path_splitted = path.strip("/").split("/")
     path_str = path_splitted[0]
-    if path_str in handler_reg:
-        handler_class = handler_reg[path_str]
-        handler = handler_class(scope, receive, send)
-        await handler.handle()
+    if (handler_class := handler_reg.get(path_str)) is not None:
+        await handler_class(scope, receive, send).handle()
     else:
         await send_response(send, 404, {"error": "Not Found!"})
