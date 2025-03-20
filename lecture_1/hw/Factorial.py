@@ -18,11 +18,15 @@ class FactorialHandler(Base, Strategy):
         try:
             n_int = int(n_str)
         except:
-            await self.send_response(self.send, 422, {"error": "Number nums be integer"})
+            await self.send_response(
+                self.send, 422, {"error": "Number nums be integer"}
+            )
             return
 
         if n_int < 0:
-            await self.send_response(self.send, 400, {"error": "the number is negative"})
+            await self.send_response(
+                self.send, 400, {"error": "the number is negative"}
+            )
             return
 
         result = math.factorial(n_int)

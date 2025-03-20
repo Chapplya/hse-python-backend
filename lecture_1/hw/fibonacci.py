@@ -1,4 +1,6 @@
-from lecture_1.hw.base import Base, fibonacci_func, Strategy
+from lecture_1.hw.base import Base, classmethod, Strategy
+
+fib_func = classmethod
 
 
 class FibonacciHandler(Base, Strategy):
@@ -16,12 +18,16 @@ class FibonacciHandler(Base, Strategy):
 
         n_int = int(n_str)
         if not (isinstance(n_int, int)):
-            await self.send_response(self.send, 422, {"error": "Number nums be integer"})
+            await self.send_response(
+                self.send, 422, {"error": "Number nums be integer"}
+            )
             return
 
         if n_int < 0:
-            await self.send_response(self.send, 400, {"error": "the number is negative"})
+            await self.send_response(
+                self.send, 400, {"error": "the number is negative"}
+            )
             return
 
-        result = fibonacci_func(n_int)
+        result = fib_func.fibonacci_func(n_int)
         await self.send_response(self.send, 200, {"result": result})
