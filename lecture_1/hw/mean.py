@@ -5,8 +5,8 @@ from lecture_1.hw.base import send_response, Base, Strategy
 class MeanHandler(Base, Strategy):
     async def handle(self):
         if self.scope["type"] != "http" or self.scope["method"] != "GET":
-           await send_response(self.send, 404, {"error": "Not Found"})
-           return
+            await send_response(self.send, 404, {"error": "Not Found"})
+            return
 
         get_mas = await self.get_body
 

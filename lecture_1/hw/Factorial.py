@@ -5,8 +5,8 @@ from lecture_1.hw.base import Base, send_response, Strategy
 class FactorialHandler(Base, Strategy):
     async def handle(self):
         if self.scope["type"] != "http" or self.scope["method"] != "GET":
-           await send_response(self.send, 404, {"error": "Not Found"})
-           return
+            await send_response(self.send, 404, {"error": "Not Found"})
+            return
 
         parse = await self.parse_str("query_string")
 
@@ -20,7 +20,6 @@ class FactorialHandler(Base, Strategy):
         except:
             await send_response(self.send, 422, {"error": "Number nums be integer"})
             return
-            
 
         if n_int < 0:
             await send_response(self.send, 400, {"error": "the number is negative"})

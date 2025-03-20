@@ -3,6 +3,7 @@ import http
 from typing import Any, Callable, Awaitable
 from abc import ABC, abstractmethod
 
+
 class Base:
     def __init__(
         self,
@@ -13,7 +14,7 @@ class Base:
         self.scope = scope
         self.receive = receive
         self.send = send
-           
+
     def fibonacci_func(self, n):
         if n <= 1:
             return n
@@ -37,10 +38,12 @@ class Base:
 
         return json.loads(get_body.get("body", b""))
 
+
 class Strategy(ABC):
     @abstractmethod
     async def handle(self):
         pass
+
 
 def fibonacci_func(n):
     if n <= 1:
@@ -50,7 +53,8 @@ def fibonacci_func(n):
         for _ in range(2, n + 1):
             a, b = b, a + b
     return b
-        
+
+
 async def send_response(send, status_code: http.HTTPStatus, body: dict):
     response_body = json.dumps(body).encode("utf-8")
     headers = [
