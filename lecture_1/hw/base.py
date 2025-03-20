@@ -26,15 +26,15 @@ class Base:
     async def parse_str(self, scope_quest):
         if scope_quest == "query_string":
             query_string = self.scope[f"{scope_quest}"].decode()
-            await dict(q.split("=") for q in query_string.split("&"))
+            return dict(q.split("=") for q in query_string.split("&"))
         elif scope_quest == "path":
             path = self.scope["path"]
-            await path.split("/")
+            return path.split("/")
 
     async def get_body(self):
         get_body = await self.recive()  # вытягиает тело запроса клиента как слвоарь
 
-        await json.loads(get_body.get("body", b""))
+        return json.loads(get_body.get("body", b""))
 
 
 async def send_response(send, status_code: http.HTTPStatus, body: dict):

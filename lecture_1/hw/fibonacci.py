@@ -7,7 +7,7 @@ class FibonacciHandler(Base):
            await send_response(self.send, 404, {"error": "Not Found"})
            return
 
-        path_parts = self.handle()
+        path_parts = await self.parse_str("path")
         n_str = path_parts[-1]
 
         if n_str is None:

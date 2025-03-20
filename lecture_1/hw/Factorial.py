@@ -15,11 +15,12 @@ class factorial(Base):
         if n_str is None:
             await send_response(self.send, 422, {"error": "Missed"})
             return
-
-        n_int = int(n_str)
-        if not (isinstance(n_int, int)):
+        try:
+            n_int = int(n_str)
+        except:
             await send_response(self.send, 422, {"error": "Number nums be integer"})
             return
+            
 
         if n_int < 0:
             await send_response(self.send, 400, {"error": "the number is negative"})
