@@ -1,9 +1,17 @@
-from lecture_1.hw.base import Base, classmethod, Strategy
-
-fib_func = classmethod
+from lecture_1.hw.base import Base,  Strategy
 
 
 class FibonacciHandler(Base, Strategy):
+    @staticmethod
+    def fibonacci_func(n):
+        if n <= 1:
+            return n
+        else:
+            a, b = 0, 1
+            for _ in range(2, n + 1):
+                a, b = b, a + b
+        return b
+    
     async def handle(self):
         if self.scope["type"] != "http" or self.scope["method"] != "GET":
             await self.send_response(self.send, 404, {"error": "Not Found"})
@@ -29,5 +37,5 @@ class FibonacciHandler(Base, Strategy):
             )
             return
 
-        result = fib_func.fibonacci_func(n_int)
+        result = fibonacci_func(n_int)
         await self.send_response(self.send, 200, {"result": result})
