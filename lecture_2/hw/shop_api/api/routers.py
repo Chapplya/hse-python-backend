@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Response
 from pydantic import NonNegativeFloat, NonNegativeInt, PositiveInt
-from shop_api.shop.cart import Cart
-from shop_api.shop.Items import Items
-from shop_api.shop.Items_in_cart import Items_In_Cart
+from lecture_2.hw.shop_api.shop.cart import Cart
+from lecture_2.hw.shop_api.shop.Items import Items, ItemCreate
+from lecture_2.hw.shop_api.shop.Items_in_cart import Items_In_Cart
 from http import HTTPStatus
 
 router_cart = APIRouter(prefix="/cart")
@@ -19,7 +19,7 @@ def generate_id_carts(carts: dict):
     return max(carts.keys(), default=0) + 1
 
 
-def generate_id_item(carts: dict):
+def generate_id_item(items: dict):
     return max(items.keys(), default=0) + 1
 
 
@@ -38,7 +38,7 @@ async def get_cart(id: int):
     if id not in carts:
         raise HTTPException(status_code=404, detail="Cart not found")
 
-    return carts[id]
+    return {"cart": carts[id]}
 
 
 @router_cart.get("", status_code=HTTPStatus.OK)
@@ -95,26 +95,26 @@ async def add_item_in_cart(cart_id: int, item_id: int):
     for it in cart.items:
         if it.id == item.id:
             it.quantity += 1
-            cart.items += it.price
+            cart.price += item.price
 
-            return {"message": "quantity increased"}
+            return {"message": "quantity increased", "cart": cart}
 
     cart.items.append(
         Items_In_Cart(
-            id=item.id, name=item.name, quantity=1, available=not items.deleted
+            id=item.id, name=item.name, quantity=1, available=not item.deleted
         )
     )
     cart.price += item.price
 
-    return {"message": "Item added to cart"}
+    return {"message": "Item added to cart", "cart": cart}
 
 
 @router_item.post("", status_code=HTTPStatus.CREATED)
-async def create_item(item: dict):
-    id_item = generate_id_item()
-    items[id_item] = Items(id=id_item, name=item["name"], price=item["price"])
+async def create_item(item: ItemCreate):
+    id_item = generate_id_item(items)
+    items[id_item] = Items(id=id_item, name=item.name, price=item.price)
 
-    return items[id_item]
+    return {"item": items[id_item]}
 
 
 @router_item.get("/{id}", status_code=HTTPStatus.OK)

@@ -6,3 +6,8 @@ class Items(BaseModel):
     name: str
     price: float
     deleted: bool = False
+
+
+class ItemCreate(BaseModel):
+    name: str
+    price: float
