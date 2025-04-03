@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Response
 from pydantic import NonNegativeFloat, NonNegativeInt, PositiveInt
-from lecture_2.hw.shop_api.shop.cart import Cart
-from lecture_2.hw.shop_api.shop.Items import Items, ItemCreate
-from lecture_2.hw.shop_api.shop.Items_in_cart import Items_In_Cart
+from hw.shop_api.shop.cart import Cart
+from hw.shop_api.shop.Items import Items, ItemCreate
+from hw.shop_api.shop.Items_in_cart import Items_In_Cart
 from http import HTTPStatus
 
 router_cart = APIRouter(prefix="/cart")
