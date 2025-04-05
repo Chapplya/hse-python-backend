@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "http://localhost:8080"
+BASE_URL = "http://localhost:8000"
 
 # Создание корзины
 response = requests.post(f"{BASE_URL}/cart")

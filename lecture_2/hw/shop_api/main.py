@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
-from hw.shop_api.api.routers import router_cart, router_item
+from lecture_2.hw.shop_api.api.routers.rout_cart import router_cart
+from lecture_2.hw.shop_api.api.routers.rout_item import router_item
 from prometheus_client import Counter, Histogram
 from prometheus_fastapi_instrumentator import Instrumentator
 from starlette.middleware.cors import CORSMiddleware
