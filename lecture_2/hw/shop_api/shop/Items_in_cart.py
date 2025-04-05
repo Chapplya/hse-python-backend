@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 
-class Items_In_Cart(BaseModel):
-    id: int
+class ItemsInCart(BaseModel):
+    id: str
     name: str
     quantity: int
     available: bool

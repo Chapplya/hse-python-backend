@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class Items(BaseModel):
-    id: int
+    id: str
     name: str
     price: float
     deleted: bool = False

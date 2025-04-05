@@ -1,37 +1,40 @@
 from fastapi import APIRouter, HTTPException, Response
 from pydantic import NonNegativeFloat, NonNegativeInt, PositiveInt
 from lecture_2.hw.shop_api.shop.cart import Cart
+from lecture_2.hw.shop_api.shop.response_mod import CartResponse
 from lecture_2.hw.shop_api.api.routers.rout_item import items
-from lecture_2.hw.shop_api.shop.Items_in_cart import Items_In_Cart
+from lecture_2.hw.shop_api.shop.Items_in_cart import ItemsInCart
+import uuid
 from http import HTTPStatus
 
 router_cart = APIRouter(prefix="/cart")
 
 carts = {}
 
-def generate_id_carts(carts: dict):
-    return max(carts.keys(), default=0) + 1
+
+def generate_id_carts():
+    return str(uuid.uuid4())
 
 
 @router_cart.post("")
 async def create_cart(response: Response):
-    id_cart = generate_id_carts(carts)
+    id_cart = generate_id_carts()
     carts[id_cart] = Cart(id=id_cart, items=[], price=0)
     response.headers["location"] = f"/cart/{id_cart}"
     response.status_code = HTTPStatus.CREATED
 
-    return {"id": id_cart}
+    return {"id1": id_cart}
 
 
-@router_cart.get("/{id}", status_code=HTTPStatus.OK)
-async def get_cart(id: int):
+@router_cart.get("/{id}", response_model=CartResponse, status_code=HTTPStatus.OK)
+async def get_cart(id: str):
     if id not in carts:
         raise HTTPException(status_code=404, detail="Cart not found")
 
-    return {"cart": carts[id]}
+    return CartResponse(**carts[id].dict())
 
 
-@router_cart.get("", status_code=HTTPStatus.OK)
+@router_cart.get("", response_model=CartResponse, status_code=HTTPStatus.OK)
 async def get_cart_param(
     offset: NonNegativeInt = 0,
     limit: PositiveInt = 10,
@@ -72,8 +75,10 @@ async def get_cart_param(
     return response
 
 
-@router_cart.post("/{cart_id}/add/{item_id}", status_code=HTTPStatus.OK)
-async def add_item_in_cart(cart_id: int, item_id: int):
+@router_cart.post(
+    "/{cart_id}/add/{item_id}", response_model=CartResponse, status_code=HTTPStatus.OK
+)
+async def add_item_in_cart(cart_id: str, item_id: str):
     if cart_id not in carts:
         raise HTTPException(status_code=404, detail="cart id not found")
     if item_id not in items:
@@ -87,13 +92,11 @@ async def add_item_in_cart(cart_id: int, item_id: int):
             it.quantity += 1
             cart.price += item.price
 
-            return {"message": "quantity increased", "cart": cart}
+            return CartResponse(id=cart_id, items=[ItemsInCart(**elem.dict()) for elem in cart.items], price=cart.price)
 
     cart.items.append(
-        Items_In_Cart(
-            id=item.id, name=item.name, quantity=1, available=not item.deleted
-        )
+        ItemsInCart(id=item.id, name=item.name, quantity=1, available=not item.deleted)
     )
     cart.price += item.price
 
-    return {"message": "Item added to cart", "cart": cart}
+    return CartResponse(id=cart_id, items=[ItemsInCart(**elem.dict()) for elem in cart.items], price=cart.price)
