@@ -13,6 +13,7 @@ class ItemsResponse(BaseModel):
     name: str
     price: float
     deleted: bool = False
-    
+
+
 class ItemListResponse(BaseModel):
     items: list[ItemsResponse]

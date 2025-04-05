@@ -20,8 +20,8 @@ items = response.json()
 print(f"Available items: {items}")
 
 # Добавление товара в корзину
-if items["items"]: 
-    first_item_id = items['items'][0]["id"]
+if items["items"]:
+    first_item_id = items["items"][0]["id"]
     response = requests.post(f"{BASE_URL}/cart/{cart_id}/add/{first_item_id}")
     print(f"Added item to cart: {response.json()}")
 
