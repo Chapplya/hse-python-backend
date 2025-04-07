@@ -11,13 +11,11 @@ router_cart = APIRouter(prefix="/cart", tags=["Carts"])
 
 @router_cart.post("")
 async def create_cart(response: Response):
-
     return CartRepositoriy().create_cart(response)
 
 
 @router_cart.get("/{id}", response_model=CartResponse, status_code=status.HTTP_200_OK)
 async def get_cart(id: str):
-
     return CartRepositoriy().get_cart(id)
 
 
@@ -30,7 +28,6 @@ async def get_cart_param(
     min_quantity: NonNegativeInt = None,
     max_quantity: NonNegativeInt = None,
 ):
-
     return CartRepositoriy().get_cart_param(
         offset,
         limit,
