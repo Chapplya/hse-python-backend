@@ -5,9 +5,9 @@ from pydantic import SecretStr
 import pytest
 from fastapi.testclient import TestClient
 
-from  lecture_4.demo_service.api.main import create_app
-from  lecture_4.demo_service.api.utils import initialize
-from  lecture_4.demo_service.core.users import UserInfo, UserRole, UserService, password_is_longer_than_8
+from  hw_4.demo_service.api.main import create_app
+from  hw_4.demo_service.api.utils import initialize
+from  hw_4.demo_service.core.users import UserInfo, UserRole, UserService, password_is_longer_than_8
 
 app = create_app()
 
