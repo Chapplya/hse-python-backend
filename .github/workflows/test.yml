@@ -17,13 +17,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install poetry
         uses: abatilo/actions-poetry@v2
+      - name: Configure Poetry
+        run: |
+          poetry config virtualenvs.create false
+          poetry config cache-dir $GITHUB_ENV/pypoetry_cache
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ${{ github.workspace }}/.venv
+            ${{ env.pypoetry_cache }}
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
       - name: Install dependencies with poetry
-        run: poetry install
+        run: poetry install --no-interaction --no-root
       - name: Run tests
         run: poetry run pytest -vv --strict --showlocals
       - name: Run lecture 4 tests
