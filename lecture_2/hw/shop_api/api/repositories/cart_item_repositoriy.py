@@ -1,8 +1,8 @@
 from fastapi import HTTPException
-from lecture_2.hw.shop_api.shop.response_mod import CartResponse
-from lecture_2.hw.shop_api.api.repositories.item_repositoriy import items
-from lecture_2.hw.shop_api.api.repositories.cart_repositoriy import CartRepositoriy
-from lecture_2.hw.shop_api.shop.Items_in_cart import ItemsInCart
+from hw.shop_api.shop.response_mod import CartResponse
+from hw.shop_api.api.repositories.item_repositoriy import items
+from hw.shop_api.api.repositories.cart_repositoriy import CartRepositoriy
+from hw.shop_api.shop.Items_in_cart import ItemsInCart
 
 
 class CartItemRepositoriy(CartRepositoriy):

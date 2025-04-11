@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from lecture_2.hw.shop_api.shop.Items_in_cart import ItemsInCart
+from hw.shop_api.shop.Items_in_cart import ItemsInCart
 
 
 class CartResponse(BaseModel):

@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from pydantic import NonNegativeFloat, NonNegativeInt, PositiveInt
-from lecture_2.hw.shop_api.shop.Items import Items, ItemCreate
-from lecture_2.hw.shop_api.shop.response_mod import ItemsResponse, ItemListResponse
+from hw.shop_api.shop.Items import Items, ItemCreate
+from hw.shop_api.shop.response_mod import ItemsResponse, ItemListResponse
 import uuid
 
 items = {}

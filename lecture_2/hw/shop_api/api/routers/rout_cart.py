@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Response, status
 from pydantic import NonNegativeFloat, NonNegativeInt, PositiveInt
-from lecture_2.hw.shop_api.shop.response_mod import CartResponse
-from lecture_2.hw.shop_api.api.repositories.cart_repositoriy import CartRepositoriy
-from lecture_2.hw.shop_api.api.repositories.cart_item_repositoriy import (
+from hw.shop_api.shop.response_mod import CartResponse
+from hw.shop_api.api.repositories.cart_repositoriy import CartRepositoriy
+from hw.shop_api.api.repositories.cart_item_repositoriy import (
     CartItemRepositoriy,
 )
 
