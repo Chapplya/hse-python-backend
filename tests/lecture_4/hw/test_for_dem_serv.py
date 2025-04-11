@@ -145,7 +145,7 @@ def test_get_usename(client):
 
 def test_error_by_username(client, user):
     response = client.post(
-        "/user-get", params={"username": user.username}, auth=("kaban", "123456789")
+        "/user-get", params={"username": "unnreal_name"}, auth=("kaban", "123456789")
     )
     assert response.status_code == HTTPStatus.NOT_FOUND
 
@@ -168,10 +168,11 @@ def test_error_id_user_promote(client):
 
 
 def test_fail_403_promote_user_without_admin(client, user):
+    print(user.username)
     response = client.post(
         "/user-promote",
         params={"id": user.uid},
-        auth=(user.uid, "123456789"),
+        auth=(user.username, "12345678910"),
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -186,6 +187,5 @@ async def test_initialize():
         assert admin.uid == 1
         assert admin.info.username == "admin"
         assert admin.info.name == "admin"
-        assert admin.info.birthdate == str(fake.date_time().isoformat())
         assert admin.info.role == UserRole.ADMIN
         assert admin.info.password == SecretStr("superSecretAdminPassword123")
