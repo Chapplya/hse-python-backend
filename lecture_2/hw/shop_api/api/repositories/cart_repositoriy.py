@@ -1,7 +1,7 @@
 from fastapi import HTTPException, Response, status
 from pydantic import NonNegativeFloat, NonNegativeInt, PositiveInt
-from lecture_2.hw.shop_api.shop.cart import Cart
-from lecture_2.hw.shop_api.shop.response_mod import CartResponse
+from hw.shop_api.shop.cart import Cart
+from hw.shop_api.shop.response_mod import CartResponse
 import uuid
 
 

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, status
 from pydantic import NonNegativeFloat, NonNegativeInt, PositiveInt
-from lecture_2.hw.shop_api.shop.Items import ItemCreate
-from lecture_2.hw.shop_api.shop.response_mod import ItemsResponse, ItemListResponse
-from lecture_2.hw.shop_api.api.repositories.item_repositoriy import ItemRepositoriy
+from hw.shop_api.shop.Items import ItemCreate
+from hw.shop_api.shop.response_mod import ItemsResponse, ItemListResponse
+from hw.shop_api.api.repositories.item_repositoriy import ItemRepositoriy
 
 router_item = APIRouter(prefix="/item", tags=["Items"])
 
