@@ -18,6 +18,7 @@ prometheus-fastapi-instrumentator = "^7.0.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.5"
+factory_boy = "^3.3.0"
 pytest-cov = "^5.0.0"
 
 
