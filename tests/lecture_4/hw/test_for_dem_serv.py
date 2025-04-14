@@ -111,23 +111,18 @@ def test_get_by_username(client):
 
 
 @pytest.mark.parametrize(
-    "parameters, excpected_code",
+    "parameters,auth_name, auth_passw, excpected_code",
     [
-        ({"id": 10, "username": "test_user"}, HTTPStatus.BAD_REQUEST),
-        ({}, HTTPStatus.BAD_REQUEST),
+        ({"id": 10, "username": "test_user"},"kaban", "123456789",  HTTPStatus.BAD_REQUEST),
+        ({},"kaban", "123456789", HTTPStatus.BAD_REQUEST),
+        ({"username": "unnreal_name"}, "kaban", "123456789",HTTPStatus.NOT_FOUND ),
+        ({"id": 1},"kaban", "12345678900", HTTPStatus.UNAUTHORIZED)
     ],
 )
-def test_error_none_params_user_get(client, parameters, excpected_code):
-    response = client.post("/user-get", params=parameters, auth=("kaban", "123456789"))
+def test_error_none_params_user_get(client, parameters, auth_name, auth_passw, excpected_code):
+    response = client.post("/user-get", params=parameters, auth=(auth_name, auth_passw))
 
     assert response.status_code == excpected_code
-
-
-def test_error_password(client):
-    response = client.post("/user-get", params={"id": 1}, auth=("kaban", "12345678900"))
-
-    assert response.status_code == HTTPStatus.UNAUTHORIZED
-
 
 def test_get_usename(client):
     response = client.post(
@@ -137,34 +132,23 @@ def test_get_usename(client):
     assert response.status_code == HTTPStatus.OK
     data = response.json()
 
-    assert data["uid"] == 1
-    assert data["username"] == "kaban"
-    assert data["name"] == "papa"
-    assert data["role"] == "admin"
+    assert data == {"uid": 1, "username": "kaban", "name": "papa", "role": "admin", 'birthdate': '2001-12-10T00:00:00'}
 
-
-def test_error_by_username(client, user):
-    response = client.post(
-        "/user-get", params={"username": "unnreal_name"}, auth=("kaban", "123456789")
-    )
-    assert response.status_code == HTTPStatus.NOT_FOUND
-
-
-def test_user_promote(client, user):
+@pytest.mark.parametrize(
+    
+    "param, excepted_code",
+    [
+        ({"id": 1}, HTTPStatus.OK),
+        ({"id": 52}, HTTPStatus.BAD_REQUEST)
+    ]
+)   
+def test_user_promote(client, param, excepted_code):
     response = client.post(
         "/user-promote",
-        params={"id": user.uid},
+        params=param,
         auth=("kaban", "123456789"),
     )
-    assert response.status_code == HTTPStatus.OK
-
-
-def test_error_id_user_promote(client):
-    response = client.post(
-        "/user-promote", params={"id": 52}, auth=("kaban", "123456789")
-    )
-
-    assert response.status_code == HTTPStatus.BAD_REQUEST
+    assert response.status_code == excepted_code
 
 
 def test_fail_403_promote_user_without_admin(client, user):
