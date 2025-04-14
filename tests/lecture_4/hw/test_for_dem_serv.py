@@ -170,7 +170,7 @@ async def test_initialize():
                 "name": "admin",
                 "role": "admin",
                 "password": str(SecretStr("superSecretAdminPassword123")),
-                "birthdate": "'1970-01-01T00:00:00'",
+                "birthdate": "1970-01-01T00:00:00",
             },
         }
 
